@@ -1,0 +1,28 @@
+// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/
+// © chanit
+
+//@version=5
+strategy("MA Cross backtest", overlay=true, initial_capital = 1000, default_qty_type = strategy.percent_of_equity, default_qty_value = 100)
+
+// Define date range for backtesting
+fromDate = input.time(title="From Date", defval=timestamp("2020-01-01T00:00:00"))
+toDate = input.time(title="To Date", defval=timestamp("9999-01-01T23:59:59"))
+
+ma = ta.sma(close, 100)
+
+// Define conditions for buy and sell signals
+buySignal = ta.crossover(close, ma)
+sellSignal = ta.crossunder(close, ma)
+
+// Execute buy and sell
+if (buySignal and time >= fromDate and time <= toDate) 
+    strategy.entry("buy",strategy.long)
+if (sellSignal and time >= fromDate and time <= toDate)
+    strategy.close("buy")
+    
+// Plot the Moving Average on the chart
+plot(ma, color=color.white)
+
+// Plot buy and sell signals on the chart
+plotshape(series=buySignal, title="Buy Signal", color=color.green, style=shape.circle, location=location.belowbar)
+plotshape(series=sellSignal, title="Sell Signal", color=color.red, style=shape.circle, location=location.abovebar)

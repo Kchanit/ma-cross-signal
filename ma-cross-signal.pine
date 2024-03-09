@@ -5,7 +5,7 @@ indicator("MA Cross Signal", overlay=true)
 maLength = input(100, title="MA Length", minval=1)
 
 // Calculate Moving Average
-ma = sma(close, maLength)
+ma = ta.sma(close, maLength)
 
 // Plot the Moving Average
 plot(ma, color=color.white, title="MA")
