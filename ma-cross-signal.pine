@@ -2,7 +2,7 @@
 indicator("MA Cross Signal", overlay=true)
 
 // Input for Moving Average length
-maLength = input(100, title="MA Length", minval=1)
+maLength = input.int(100, title="MA Length", minval=1)
 
 // Calculate Moving Average
 ma = ta.sma(close, maLength)
@@ -10,12 +10,12 @@ ma = ta.sma(close, maLength)
 // Plot the Moving Average
 plot(ma, color=color.white, title="MA")
 
-// Generate Buy Signal
-buySignal = crossover(close, ma)
+// Check for Buy Signal
+buySignal = close > ma and close[1] <= ma[1]
 
-// Generate Sell Signal
-sellSignal = crossunder(close, ma)
+// Check for Sell Signal
+sellSignal = close < ma and close[1] >= ma[1]
 
 // Plot Buy and Sell signals on the chart
-plotshape(series=buySignal, title="Buy Signal", color=color.green, style=shape.triangleup, location=location.belowbar)
-plotshape(series=sellSignal, title="Sell Signal", color=color.red, style=shape.triangledown, location=location.abovebar)
+plotshape(series=buySignal, title="Buy Signal", color=color.green, style=shape.circle, location=location.belowbar)
+plotshape(series=sellSignal, title="Sell Signal", color=color.red, style=shape.circle, location=location.abovebar)
